@@ -16,5 +16,11 @@
     "remark": "15.0.1",
     "remark-gfm": "4.0.0",
     "remark-html": "16.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22"
   }
 }
