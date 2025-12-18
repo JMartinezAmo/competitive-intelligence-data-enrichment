@@ -1,0 +1,34 @@
+
+Tool,Tier,Price,Credits/Contacts,Users,Key Features
+Clay,Free,0,"1,200 credits/year",Unlimited,Basic features
+Clay,Starter,$134/mo (annual),24K credits/year,Unlimited,"Roll-over credits, AI Claygent, Up to 2k/search"
+Clay,Explorer,$314/mo (annual),120K credits/year,Unlimited,"10k/search, Webhooks, Email sequencing integrations"
+Clay,Pro,$720/mo (annual),600K credits/year,Unlimited,"25k/search, CRM integrations, API"
+Clay,Enterprise,Custom,Custom,Unlimited,"All pro features, dedicated support"
+Persana AI,Free,$0/mo,50 credits,Unlimited,"Email & phone waterfall, AI research"
+Persana AI,Starter,$68/mo (annual),24K credits/year,Unlimited,"Email & phone waterfall, web scrapers"
+Persana AI,Growth,$151/mo (annual),60K credits/year,Unlimited,"Sequencing integrations, Lookalike finder, API"
+Persana AI,Pro,$400/mo (annual),216K credits/year,Unlimited,"ABM, CRM integration, job changes, intent data"
+Persana AI,Unlimited,$600/mo (annual),600K credits/year,Unlimited,"Unlimited searches, Autopilot AI agents"
+Persana AI,Enterprise,Custom,Custom,Unlimited,"AI SDR full-service, custom playbooks"
+Freckle,Free,$0/mo,500 credits,Unlimited,"Agent columns, exporting, web search & scraping"
+Freckle,Paid Plans,From $99 to $6250/mo,2.5K–250K credits/month,Unlimited,Credit-based pricing with waterfalls and integrations
+BetterContact,Starter,$15/mo,200 credits/month,Unlimited,"Waterfall enrichment (20+ vendors), API, email verification"
+BetterContact,Pro,$49/mo,1000+ credits/month,Unlimited,"Credit roll-over, API, mobile verification"
+BetterContact,Enterprise,From $799/mo,Custom,Unlimited,"Custom credits, enterprise support"
+Databar.ai,Launch,$39/mo,1K credits/month,3 editors,"80+ data providers, AI scraper, webhooks"
+Databar.ai,Scale,$129/mo,8K credits/month,5 editors,"CRM & email integrations, custom APIs"
+Databar.ai,Expand,$500/mo,50K credits/month,20 editors,"Unlimited custom APIs, dedicated support"
+Databar.ai,Enterprise,Custom,Custom,Unlimited,"Dedicated infrastructure, white‑glove support"
+Cargo,Usage-based,$0.25/credit,Flexible,Unlimited,"Free trial with 100 credits, unlimited workflows"
+11x.ai,Base Package,"$5,000/mo (annual contract)","3,000 contacts/month",N/A,"Access to digital workers (Alice & Julian), basic support"
+11x.ai,Custom Discount,"$1,230–$5,000/mo",Variable,N/A,Pricing varies; requires negotiation
+Landbase,Free Tier,$0,Limited,Unknown,Generate campaign plans & messaging
+Landbase,Full Autonomy,"~$3,000/mo",N/A,N/A,"Autonomous campaigns, no annual commitment"
+Landbase,Enterprise,Custom,Custom,N/A,Agentic AI with additional support
+Gumloop,Free,$0/mo,2K credits/month,1 seat,"1 active trigger, Gummie agent"
+Gumloop,Solo,$37/mo,10K+ credits/month,1 seat,"Unlimited triggers, webhooks, BYO API key"
+Gumloop,Team,$244/mo,60K+ credits/month,10 seats,"Team analytics, dedicated support"
+Gumloop,Enterprise,Custom,Custom,Unlimited,"Advanced security, VPC, RBAC"
+Tapistro,Starter,$199/mo per user,N/A,Per-user,"AI GTM platform, intent connectors, real-time enrichment"
+Tapistro,Enterprise,Custom,Custom,Per-user,Full platform with custom pricing

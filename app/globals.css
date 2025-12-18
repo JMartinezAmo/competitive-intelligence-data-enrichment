@@ -1,0 +1,74 @@
+:root{
+  --bg:#0b0c10;
+  --panel:#11131a;
+  --card:#0e1017;
+  --muted:#9aa3b2;
+  --text:#e9edf5;
+  --line:#212634;
+  --ok:#36d399;
+  --warn:#fbbf24;
+  --bad:#f87171;
+  --info:#60a5fa;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+a{color:var(--info);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.header{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:16px;
+}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brandTitle{font-weight:900;font-size:16px}
+.brandSub{color:var(--muted);font-size:12px}
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{
+  border:1px solid var(--line);background:var(--card);color:var(--text);
+  padding:8px 10px;border-radius:999px;font-size:13px;
+}
+.btn{
+  border:1px solid var(--line);background:#151827;color:var(--text);
+  padding:8px 10px;border-radius:12px;cursor:pointer;font-size:13px;
+}
+.btnDanger{border-color:#3a1f1f;background:#1a0f10}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.card{
+  border:1px solid var(--line);background:var(--card);
+  border-radius:16px;padding:14px;
+}
+.cardTitle{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.h1{margin:0;font-size:20px}
+.h2{margin:0;font-size:14px}
+.muted{color:var(--muted);font-size:12px}
+.kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;font-size:12px;color:var(--muted)}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:10px;vertical-align:top}
+th{position:sticky;top:0;background:#0b0c10;text-align:left}
+pre,code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace}
+.markdown :is(h1,h2,h3){margin-top:18px}
+.markdown h1{font-size:18px}
+.markdown h2{font-size:16px}
+.markdown h3{font-size:14px}
+.markdown p{line-height:1.45}
+.markdown blockquote{border-left:3px solid var(--line);margin:10px 0;padding:6px 10px;color:var(--muted)}
+.markdown table{border:1px solid var(--line)}
+.markdown th{background:#0e1017}
+.markdown td, .markdown th{border:1px solid var(--line)}
+.input{
+  width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+  background:#0e1017;color:var(--text);
+}
+.select{
+  padding:8px 10px;border-radius:12px;border:1px solid var(--line);
+  background:#0e1017;color:var(--text);
+}
+textarea{width:100%;min-height:80px;border-radius:12px;border:1px solid var(--line);background:#0e1017;color:var(--text);padding:10px;resize:vertical}
+.small{font-size:12px}
