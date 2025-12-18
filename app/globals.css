@@ -9,6 +9,20 @@
   --warn:#fbbf24;
   --bad:#f87171;
   --info:#60a5fa;
+
+  /* Colores por Tier */
+  --tier1:#f59e0b;
+  --tier1-bg:rgba(245,158,11,0.1);
+  --tier2:#8b5cf6;
+  --tier2-bg:rgba(139,92,246,0.1);
+  --tier3:#6b7280;
+  --tier3-bg:rgba(107,114,128,0.1);
+
+  /* Colores por Vector */
+  --vector-orchestration:#3b82f6;
+  --vector-waterfall:#10b981;
+  --vector-ai-sdr:#ec4899;
+  --vector-technical:#f97316;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -72,3 +86,129 @@ pre,code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, mono
 }
 textarea{width:100%;min-height:80px;border-radius:12px;border:1px solid var(--line);background:#0e1017;color:var(--text);padding:10px;resize:vertical}
 .small{font-size:12px}
+
+/* Transiciones globales */
+.card,.btn,.pill{transition:all 0.2s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.3);border-color:var(--line)}
+.btn:hover{background:var(--panel);border-color:var(--muted)}
+.btn:active{transform:scale(0.98)}
+
+/* Tier Badges */
+.tierBadge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.tierBadge--1{background:var(--tier1-bg);color:var(--tier1);border:1px solid var(--tier1)}
+.tierBadge--2{background:var(--tier2-bg);color:var(--tier2);border:1px solid var(--tier2)}
+.tierBadge--3{background:var(--tier3-bg);color:var(--tier3);border:1px solid var(--tier3)}
+
+/* Vector Tags */
+.vectorTag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:6px;font-size:11px;
+  background:var(--card);border:1px solid var(--line);
+}
+.vectorTag--orchestration{color:var(--vector-orchestration);border-color:var(--vector-orchestration)}
+.vectorTag--waterfall{color:var(--vector-waterfall);border-color:var(--vector-waterfall)}
+.vectorTag--ai-sdr{color:var(--vector-ai-sdr);border-color:var(--vector-ai-sdr)}
+.vectorTag--technical{color:var(--vector-technical);border-color:var(--vector-technical)}
+
+/* Feature Icons */
+.featureIcon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-size:14px}
+.featureIcon--yes{background:rgba(54,211,153,0.15);color:var(--ok)}
+.featureIcon--no{background:rgba(248,113,113,0.15);color:var(--bad)}
+.featureIcon--partial{background:rgba(251,191,36,0.15);color:var(--warn)}
+.featureIcon--unknown{background:rgba(107,114,128,0.15);color:var(--muted)}
+
+/* Feature Score */
+.featureScore{display:flex;align-items:center;gap:8px}
+.featureScore__bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.featureScore__fill{height:100%;background:var(--ok);border-radius:3px;transition:width 0.3s ease}
+.featureScore__text{font-size:12px;color:var(--muted);min-width:40px}
+
+/* Price Bar */
+.priceBar{display:flex;align-items:center;gap:8px}
+.priceBar__track{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.priceBar__fill{height:100%;background:linear-gradient(90deg,var(--info),var(--vector-orchestration));border-radius:4px}
+.priceBar__label{font-size:12px;font-weight:600;min-width:70px;text-align:right}
+
+/* Tool Card mejorada */
+.toolCard{
+  border:1px solid var(--line);background:var(--card);
+  border-radius:16px;padding:16px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.toolCard:hover{border-color:var(--muted)}
+.toolCard__header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.toolCard__title{font-size:16px;font-weight:700;margin:0}
+.toolCard__meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.toolCard__stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.toolCard__stat{display:flex;flex-direction:column;gap:2px}
+.toolCard__statLabel{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.toolCard__statValue{font-size:14px;font-weight:600}
+.toolCard__actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Tier Section */
+.tierSection{margin-bottom:32px}
+.tierSection__header{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;margin-bottom:16px;
+  border-bottom:1px solid var(--line);
+}
+.tierSection__title{font-size:14px;font-weight:700;margin:0;display:flex;align-items:center;gap:8px}
+.tierSection__count{font-size:12px;color:var(--muted)}
+.tierSection__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+
+/* Comparison Table mejorada */
+.compareTable th{background:var(--panel);font-weight:600}
+.compareTable td{text-align:center}
+.compareTable__toolHeader{display:flex;flex-direction:column;align-items:center;gap:4px}
+.compareTable__toolName{font-weight:600}
+
+/* Stats Cards */
+.statsGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.statCard{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px;text-align:center;
+}
+.statCard__icon{font-size:24px;margin-bottom:8px}
+.statCard__value{font-size:20px;font-weight:700}
+.statCard__label{font-size:11px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+
+/* Feature Checklist */
+.featureChecklist{display:flex;flex-direction:column;gap:8px}
+.featureChecklist__item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:8px;
+  background:var(--panel);font-size:13px;
+}
+.featureChecklist__item--yes{border-left:3px solid var(--ok)}
+.featureChecklist__item--no{border-left:3px solid var(--bad);opacity:0.7}
+.featureChecklist__item--partial{border-left:3px solid var(--warn)}
+
+/* Price Comparison Chart */
+.priceChart{display:flex;flex-direction:column;gap:12px}
+.priceChart__row{display:flex;align-items:center;gap:12px}
+.priceChart__label{min-width:100px;font-size:13px;font-weight:500}
+.priceChart__bar{flex:1;height:24px;background:var(--line);border-radius:6px;overflow:hidden;position:relative}
+.priceChart__fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:600;color:var(--bg)}
+.priceChart__value{min-width:80px;text-align:right;font-size:13px;font-weight:600}
+
+/* Empty State */
+.emptyState{
+  text-align:center;padding:48px 24px;
+  border:1px dashed var(--line);border-radius:16px;
+}
+.emptyState__icon{font-size:48px;margin-bottom:16px;opacity:0.5}
+.emptyState__message{color:var(--muted);font-size:14px}
+
+/* Responsive */
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr}
+  .tierSection__grid{grid-template-columns:1fr}
+  .statsGrid{grid-template-columns:repeat(2,1fr)}
+  .toolCard__stats{grid-template-columns:1fr}
+  .header{flex-direction:column;align-items:flex-start}
+  .nav{width:100%;justify-content:flex-start;overflow-x:auto}
+}
