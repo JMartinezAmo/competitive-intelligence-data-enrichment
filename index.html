@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Competitive Intel Validator</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="title">Intel Validator</div>
+        <div class="subtitle">10 tools · estado en localStorage</div>
+      </div>
+
+      <input id="search" class="search" placeholder="Buscar herramienta…" />
+
+      <div id="toolList" class="toolList"></div>
+
+      <div class="sidebarFooter">
+        <button id="exportBtn" class="btn">Exportar progreso</button>
+        <label class="btn btnSecondary">
+          Importar progreso
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </label>
+        <button id="resetBtn" class="btn btnDanger">Reset local</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div>
+          <h1 id="toolName">Selecciona una herramienta</h1>
+          <div id="toolMeta" class="meta"></div>
+        </div>
+        <div class="progressWrap">
+          <div class="progressLabel" id="progressLabel"></div>
+          <div class="progressBar"><div id="progressFill" class="progressFill"></div></div>
+        </div>
+      </header>
+
+      <section id="content" class="content">
+        <div class="empty">
+          Elige una herramienta a la izquierda. Sí, como en 2007. Funciona.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
