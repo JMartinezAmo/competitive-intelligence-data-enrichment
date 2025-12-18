@@ -19,3 +19,8 @@ npm run dev
 
 ## Checklist (extra)
 Se guarda en `localStorage` con key `ci_review_v1`. Export/Import/Reset desde el header.
+
+
+## Vercel: Output Directory
+- Si Vercel te pide un Output Directory, usa **.next** (Next.js).
+- Este repo incluye `vercel.json` y un `public/` vacío para evitar errores por config previa.
