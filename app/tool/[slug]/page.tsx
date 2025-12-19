@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { getTool, TOOLS } from "@/lib/tools";
 import { readText } from "@/lib/fs";
-import { mdToHtml } from "@/lib/markdown";
+import { mdToHtml, extractStrengths, extractWeaknesses } from "@/lib/markdown";
 import { ComparePicker } from "@/components/ComparePicker";
 import { ReviewPanel } from "@/components/ReviewPanel";
 import { getToolStats } from "@/lib/tables";
 import { HeroStats } from "@/components/HeroStats";
 import { FeatureChecklist } from "@/components/FeatureChecklist";
 import { PricingTable } from "@/components/PricingTable";
+import { StrengthsWeaknesses } from "@/components/StrengthsWeaknesses";
 import { TierBadge } from "@/components/ui/TierBadge";
 import { VectorTags } from "@/components/ui/VectorTag";
 import { ExternalLinkIcon } from "@/components/Icons";
@@ -34,6 +35,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
   const md = await readText(tool.reportPath);
   const html = await mdToHtml(md);
   const stats = await getToolStats(tool.name);
+
+  // Extract strengths and weaknesses from markdown
+  const strengths = extractStrengths(md);
+  const weaknesses = extractWeaknesses(md);
 
   return (
     <div>
@@ -75,6 +80,11 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             hasApi={stats.hasApi}
           />
         </div>
+      </div>
+
+      {/* Strengths & Weaknesses - Prominent Section */}
+      <div style={{ marginBottom: 20 }}>
+        <StrengthsWeaknesses strengths={strengths} weaknesses={weaknesses} />
       </div>
 
       {/* Main Content Grid */}

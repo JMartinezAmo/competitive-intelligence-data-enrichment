@@ -6,34 +6,23 @@ import { loadState, saveState } from "@/components/storage";
 import { TOOLS } from "@/lib/tools";
 import { FeatureIcon } from "@/components/ui/FeatureIcon";
 import { TierBadge } from "@/components/ui/TierBadge";
-import { CheckIcon, BarChartIcon } from "@/components/Icons";
+import { Tooltip, TIER_EXPLANATIONS, VECTOR_EXPLANATIONS } from "@/components/ui/Tooltip";
+import { CheckIcon, BarChartIcon, InfoIcon } from "@/components/Icons";
 import { PriceComparisonChart } from "@/components/charts/PriceComparisonChart";
 import { FeatureComparisonChart } from "@/components/charts/FeatureComparisonChart";
 
 type Mode = "features" | "pricing";
 type MetricsData = Record<string, { priceMin: number; priceMax: number; featureCount: number; totalFeatures: number }>;
+
 function normalize(s: string) { return (s || "").trim().toLowerCase(); }
-
-function findToolCol(headers: string[]) {
-  const idx = headers.findIndex(h => normalize(h) === "tool" || normalize(h) === "name");
-  return idx >= 0 ? idx : 0;
-}
-
-// Determina si un valor es de tipo feature (Yes/No/Partial)
-function isFeatureValue(value: string): boolean {
-  const v = normalize(value);
-  return ["yes", "no", "partial", "limited", "unknown", "true", "false"].includes(v) ||
-         v.includes("partial") || v.includes("limited");
-}
 
 // Agrupa herramientas por tier para el selector
 function groupToolsByTier() {
-  const groups = {
+  return {
     "Tier 1": TOOLS.filter(t => t.tier === "Tier 1"),
     "Tier 2": TOOLS.filter(t => t.tier === "Tier 2"),
     "Tier 3": TOOLS.filter(t => t.tier === "Tier 3"),
   };
-  return groups;
 }
 
 export function CompareClient({
@@ -47,7 +36,6 @@ export function CompareClient({
 }) {
   const [mode, setMode] = useState<Mode>("features");
   const [selected, setSelected] = useState<string[]>([]);
-  const [query, setQuery] = useState("");
   const [showCharts, setShowCharts] = useState(true);
 
   const toolsByTier = useMemo(() => groupToolsByTier(), []);
@@ -90,10 +78,8 @@ export function CompareClient({
 
     let next: string[];
     if (allSelected) {
-      // Deseleccionar todos del tier
       next = (st.compare || []).filter(s => !tierSlugs.includes(s));
     } else {
-      // Seleccionar todos del tier
       const current = new Set(st.compare || []);
       tierSlugs.forEach(s => current.add(s));
       next = Array.from(current);
@@ -109,60 +95,73 @@ export function CompareClient({
     setSelected([]);
   }
 
-  const table = mode === "features" ? features : pricing;
-  const toolCol = useMemo(() => findToolCol(table.headers), [table.headers]);
-
+  // Get selected tool names
   const selectedNames = useMemo(() => {
     return selected
       .map(slug => TOOLS.find(t => t.slug === slug)?.name)
       .filter(Boolean) as string[];
   }, [selected]);
 
-  const filteredRows = useMemo(() => {
-    let rows = table.rows;
-    if (selectedNames.length) {
-      const allow = new Set(selectedNames.map(normalize));
-      rows = rows.filter(r => allow.has(normalize(r[toolCol] || "")));
-    }
-    return rows;
-  }, [table.rows, selectedNames, toolCol]);
+  // Para features: transponer la tabla (features como filas, tools como columnas)
+  const featureComparisonData = useMemo(() => {
+    if (mode !== "features" || selectedNames.length === 0) return null;
 
-  const visibleHeaders = useMemo(() => {
-    const q = normalize(query);
-    if (!q) return table.headers;
-    return table.headers.filter((h, i) => i === toolCol || normalize(h).includes(q));
-  }, [table.headers, query, toolCol]);
+    const headers = features.headers; // [Feature, Tool1, Tool2, ...]
+    const featureColIdx = headers.findIndex(h => normalize(h) === "feature");
 
-  const visibleIdx = useMemo(() => visibleHeaders.map(h => table.headers.indexOf(h)), [visibleHeaders, table.headers]);
+    // Encontrar índices de las columnas de herramientas seleccionadas
+    const toolIndices = selectedNames.map(name => {
+      const idx = headers.findIndex(h => normalize(h) === normalize(name));
+      return { name, idx };
+    }).filter(t => t.idx >= 0);
 
-  // Cuenta features por herramienta seleccionada (solo en modo features)
-  const featureCounts = useMemo(() => {
-    if (mode !== "features") return new Map<string, { yes: number; total: number }>();
+    if (toolIndices.length === 0) return null;
 
-    const counts = new Map<string, { yes: number; total: number }>();
+    // Extraer datos
+    const rows = features.rows.map(row => {
+      const featureName = row[featureColIdx] || row[0];
+      const values: Record<string, string> = {};
+      toolIndices.forEach(({ name, idx }) => {
+        values[name] = row[idx] || "";
+      });
+      return { feature: featureName, values };
+    });
 
-    for (const row of filteredRows) {
-      const toolName = row[toolCol];
-      let yesCount = 0;
-      let total = 0;
+    return { tools: toolIndices.map(t => t.name), rows };
+  }, [features, mode, selectedNames]);
 
-      for (let i = 0; i < row.length; i++) {
-        if (i === toolCol) continue;
-        const val = normalize(row[i] || "");
-        if (isFeatureValue(row[i] || "")) {
-          total++;
-          if (val === "yes" || val === "true") yesCount++;
-        }
-      }
+  // Para pricing: filtrar filas por herramientas seleccionadas
+  const pricingComparisonData = useMemo(() => {
+    if (mode !== "pricing" || selectedNames.length === 0) return null;
 
-      counts.set(normalize(toolName), { yes: yesCount, total });
-    }
+    const toolColIdx = pricing.headers.findIndex(h => normalize(h) === "tool");
+    const allowedTools = new Set(selectedNames.map(normalize));
 
-    return counts;
-  }, [filteredRows, toolCol, mode]);
+    const filteredRows = pricing.rows.filter(row => {
+      const toolName = normalize(row[toolColIdx] || "");
+      return allowedTools.has(toolName);
+    });
+
+    return { headers: pricing.headers, rows: filteredRows };
+  }, [pricing, mode, selectedNames]);
 
   return (
     <div>
+      {/* Guía de ayuda */}
+      <div className="card" style={{ padding: 16, marginBottom: 16, background: "linear-gradient(135deg, var(--panel) 0%, var(--card) 100%)" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+          <InfoIcon size={20} style={{ color: "var(--info)", flexShrink: 0, marginTop: 2 }} />
+          <div>
+            <div style={{ fontWeight: 700, marginBottom: 6 }}>Cómo usar el comparador</div>
+            <div className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>
+              1. Selecciona las herramientas que quieres comparar usando los botones de abajo<br/>
+              2. Usa las pestañas <strong>Features</strong> / <strong>Pricing</strong> para cambiar la vista<br/>
+              3. Los gráficos muestran un resumen visual de precios y funcionalidades
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header con controles */}
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", marginBottom: 16 }}>
         <div style={{ display: "flex", gap: 4 }}>
@@ -190,16 +189,8 @@ export function CompareClient({
           </button>
         </div>
 
-        <input
-          className="input"
-          placeholder="Filtrar columnas..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ maxWidth: 280, flex: 1 }}
-        />
-
         <div className="muted" style={{ fontSize: 13 }}>
-          <strong style={{ color: "var(--text)" }}>{selected.length}</strong> seleccionadas
+          <strong style={{ color: "var(--text)" }}>{selected.length}</strong> herramientas seleccionadas
         </div>
 
         {selected.length > 0 && (
@@ -225,7 +216,7 @@ export function CompareClient({
         )}
       </div>
 
-      {/* Selector de herramientas por tier */}
+      {/* Selector de herramientas por tier con tooltips */}
       <div className="card" style={{ padding: 16, marginBottom: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
@@ -237,12 +228,13 @@ export function CompareClient({
         {(["Tier 1", "Tier 2", "Tier 3"] as const).map((tier) => {
           const tools = toolsByTier[tier];
           const allSelected = tools.every(t => selected.includes(t.slug));
-          const someSelected = tools.some(t => selected.includes(t.slug));
 
           return (
             <div key={tier} style={{ marginBottom: 12 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <TierBadge tier={tier} size="sm" showIcon={false} />
+                <Tooltip content={TIER_EXPLANATIONS[tier]}>
+                  <TierBadge tier={tier} size="sm" showIcon={false} />
+                </Tooltip>
                 <button
                   className="btn"
                   onClick={() => selectAllTier(tier)}
@@ -255,22 +247,34 @@ export function CompareClient({
                 {tools.map(t => {
                   const on = selected.includes(t.slug);
                   return (
-                    <button
+                    <Tooltip
                       key={t.slug}
-                      className="pill"
-                      onClick={() => toggle(t.slug)}
-                      style={{
-                        opacity: on ? 1 : 0.5,
-                        borderColor: on ? "var(--ok)" : undefined,
-                        background: on ? "rgba(54, 211, 153, 0.1)" : undefined,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                      }}
+                      content={
+                        <div>
+                          <div style={{ fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
+                          <div style={{ color: "var(--muted)" }}>
+                            {t.vectors.map(v => VECTOR_EXPLANATIONS[v as keyof typeof VECTOR_EXPLANATIONS] || v).join(" | ")}
+                          </div>
+                        </div>
+                      }
+                      position="bottom"
                     >
-                      {on && <CheckIcon size={12} />}
-                      {t.name}
-                    </button>
+                      <button
+                        className="pill"
+                        onClick={() => toggle(t.slug)}
+                        style={{
+                          opacity: on ? 1 : 0.5,
+                          borderColor: on ? "var(--ok)" : undefined,
+                          background: on ? "rgba(54, 211, 153, 0.1)" : undefined,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                        }}
+                      >
+                        {on && <CheckIcon size={12} />}
+                        {t.name}
+                      </button>
+                    </Tooltip>
                   );
                 })}
               </div>
@@ -298,119 +302,106 @@ export function CompareClient({
         </div>
       )}
 
-      {/* Resumen de comparación (solo en modo features) */}
-      {mode === "features" && selected.length > 0 && (
-        <div className="card" style={{ padding: 16, marginBottom: 16, background: "var(--panel)" }}>
-          <div style={{ fontWeight: 700, marginBottom: 12 }}>Resumen de Features</div>
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            {Array.from(featureCounts.entries())
-              .sort((a, b) => b[1].yes - a[1].yes)
-              .map(([toolName, counts]) => {
-                const tool = TOOLS.find(t => normalize(t.name) === toolName);
-                return (
-                  <div
-                    key={toolName}
-                    style={{
-                      padding: "10px 14px",
-                      background: "var(--card)",
-                      borderRadius: 8,
-                      border: "1px solid var(--line)",
-                    }}
-                  >
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{tool?.name || toolName}</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: "var(--ok)" }}>
-                      {counts.yes}<span style={{ color: "var(--muted)", fontSize: 14 }}>/{counts.total}</span>
-                    </div>
-                    <div className="muted" style={{ fontSize: 11 }}>features</div>
-                  </div>
-                );
-              })}
+      {/* Tabla de comparación de FEATURES - herramientas como columnas */}
+      {mode === "features" && (
+        <>
+          {featureComparisonData && featureComparisonData.tools.length > 0 ? (
+            <div className="tableWrap" style={{ maxHeight: "60vh" }}>
+              <table className="compareTable">
+                <thead>
+                  <tr>
+                    <th style={{ minWidth: 200, textAlign: "left" }}>Feature</th>
+                    {featureComparisonData.tools.map(toolName => {
+                      const tool = TOOLS.find(t => t.name === toolName);
+                      return (
+                        <th key={toolName} style={{ minWidth: 100 }}>
+                          <div className="compareTable__toolHeader">
+                            {tool && <TierBadge tier={tool.tier} size="sm" showIcon={false} />}
+                            <span className="compareTable__toolName">{toolName}</span>
+                          </div>
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {featureComparisonData.rows.map((row, idx) => (
+                    <tr key={idx}>
+                      <td style={{ textAlign: "left", fontWeight: 500 }}>{row.feature}</td>
+                      {featureComparisonData.tools.map(toolName => (
+                        <td key={toolName}>
+                          <FeatureIcon value={row.values[toolName]} />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="emptyState">
+              <div style={{ fontSize: 48, marginBottom: 16 }}>📊</div>
+              <div style={{ fontWeight: 600, marginBottom: 8 }}>Selecciona herramientas para comparar</div>
+              <div className="muted">Usa los botones de arriba para elegir qué herramientas quieres comparar lado a lado</div>
+            </div>
+          )}
+
+          {/* Leyenda */}
+          <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <FeatureIcon value="Yes" />
+              <span className="muted" style={{ fontSize: 12 }}>Soportado</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <FeatureIcon value="Partial" />
+              <span className="muted" style={{ fontSize: 12 }}>Parcial/Limitado</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <FeatureIcon value="No" />
+              <span className="muted" style={{ fontSize: 12 }}>No soportado</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <FeatureIcon value="Unknown" />
+              <span className="muted" style={{ fontSize: 12 }}>Desconocido</span>
+            </div>
           </div>
-        </div>
+        </>
       )}
 
-      {/* Tabla de comparación */}
-      <div className="tableWrap" style={{ maxHeight: "60vh" }}>
-        <table className="compareTable">
-          <thead>
-            <tr>
-              {visibleHeaders.map((h, idx) => {
-                // Buscar si este header corresponde a una herramienta para mostrar tier badge
-                const tool = TOOLS.find(t => normalize(t.name) === normalize(h));
-                return (
-                  <th key={h}>
-                    {tool ? (
-                      <div className="compareTable__toolHeader">
-                        <TierBadge tier={tool.tier} size="sm" showIcon={false} />
-                        <span className="compareTable__toolName">{h}</span>
-                      </div>
-                    ) : (
-                      h
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRows.length === 0 ? (
-              <tr>
-                <td colSpan={visibleHeaders.length} style={{ textAlign: "center", padding: 40 }}>
-                  <div className="emptyState" style={{ border: "none" }}>
-                    <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
-                    <div className="muted">Selecciona herramientas para comparar</div>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              filteredRows.map((r, idx) => (
-                <tr key={idx}>
-                  {visibleIdx.map((i, colIdx) => {
-                    const value = r[i] ?? "";
-                    const isFirstCol = colIdx === 0;
-
-                    // En modo features, mostrar iconos para valores Yes/No/Partial
-                    if (mode === "features" && !isFirstCol && isFeatureValue(value)) {
-                      return (
-                        <td key={i}>
-                          <FeatureIcon value={value} />
+      {/* Tabla de comparación de PRICING */}
+      {mode === "pricing" && (
+        <>
+          {pricingComparisonData && pricingComparisonData.rows.length > 0 ? (
+            <div className="tableWrap" style={{ maxHeight: "60vh" }}>
+              <table className="compareTable">
+                <thead>
+                  <tr>
+                    {pricingComparisonData.headers.map((h, idx) => (
+                      <th key={idx} style={{ textAlign: idx === 0 ? "left" : "center" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {pricingComparisonData.rows.map((row, idx) => (
+                    <tr key={idx}>
+                      {row.map((cell, cellIdx) => (
+                        <td key={cellIdx} style={{ textAlign: cellIdx === 0 ? "left" : "center" }}>
+                          {cell}
                         </td>
-                      );
-                    }
-
-                    return (
-                      <td key={i} style={{ textAlign: isFirstCol ? "left" : "center" }}>
-                        {value}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Leyenda */}
-      {mode === "features" && (
-        <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <FeatureIcon value="Yes" />
-            <span className="muted" style={{ fontSize: 12 }}>Soportado</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <FeatureIcon value="Partial" />
-            <span className="muted" style={{ fontSize: 12 }}>Parcial/Limitado</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <FeatureIcon value="No" />
-            <span className="muted" style={{ fontSize: 12 }}>No soportado</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <FeatureIcon value="Unknown" />
-            <span className="muted" style={{ fontSize: 12 }}>Desconocido</span>
-          </div>
-        </div>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="emptyState">
+              <div style={{ fontSize: 48, marginBottom: 16 }}>💰</div>
+              <div style={{ fontWeight: 600, marginBottom: 8 }}>Selecciona herramientas para ver precios</div>
+              <div className="muted">Usa los botones de arriba para elegir qué herramientas quieres comparar</div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

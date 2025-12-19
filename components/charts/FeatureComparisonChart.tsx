@@ -77,7 +77,7 @@ export function FeatureComparisonChart({ selectedSlugs, featureCounts }: Props) 
               }}
             >
               {item.percent > 40 && (
-                <span style={{ color: "var(--bg)", paddingRight: 8 }}>
+                <span style={{ color: "#fff", fontWeight: 700, paddingRight: 8, textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
                   {item.count}/{item.total}
                 </span>
               )}

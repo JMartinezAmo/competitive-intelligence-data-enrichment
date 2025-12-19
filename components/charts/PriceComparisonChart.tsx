@@ -89,7 +89,7 @@ export function PriceComparisonChart({ selectedSlugs, pricingData, showMax = tru
                 }}
               >
                 {percent > 30 && (
-                  <span style={{ color: "var(--bg)", paddingRight: 8 }}>
+                  <span style={{ color: "#fff", fontWeight: 700, paddingRight: 8, textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
                     {formatPrice(price)}
                   </span>
                 )}
