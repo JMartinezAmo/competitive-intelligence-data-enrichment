@@ -22,6 +22,13 @@ export const TOOLS: Tool[] = [
 
   { slug: "gumloop", name: "Gumloop", tier: "Tier 3", vectors: ["Technical moats"], website: "https://www.gumloop.com", reportPath: "content/reports/gumloop.md" },
   { slug: "tapistro", name: "Tapistro", tier: "Tier 3", vectors: ["Technical moats"], website: "https://www.tapistro.com", reportPath: "content/reports/tapistro.md" },
+
+  // New competitors added
+  { slug: "apollo-io", name: "Apollo.io", tier: "Tier 1", vectors: ["Orchestration leaders"], website: "https://www.apollo.io", reportPath: "content/reports/apollo.md" },
+  { slug: "lusha", name: "Lusha", tier: "Tier 2", vectors: ["Waterfall pioneers"], website: "https://www.lusha.com", reportPath: "content/reports/lusha.md" },
+  { slug: "cognism", name: "Cognism", tier: "Tier 2", vectors: ["Technical moats"], website: "https://www.cognism.com", reportPath: "content/reports/cognism.md" },
+  { slug: "seamless-ai", name: "Seamless.AI", tier: "Tier 3", vectors: ["AI SDR category"], website: "https://www.seamless.ai", reportPath: "content/reports/seamless-ai.md" },
+  { slug: "zoominfo", name: "ZoomInfo", tier: "Tier 1", vectors: ["Orchestration leaders", "Technical moats"], website: "https://www.zoominfo.com", reportPath: "content/reports/zoominfo.md" },
 ];
 
 export function getTool(slug: string): Tool | undefined {

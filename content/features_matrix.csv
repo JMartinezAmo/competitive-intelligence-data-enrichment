@@ -1,16 +1,16 @@
 
-Feature,Clay,Persana AI,Freckle,BetterContact,Databar.ai,Cargo,11x.ai,Landbase,Gumloop,Tapistro
-Waterfall enrichment (multi-provider),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes
-AI agents autonomous,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Limited,Yes
-"Intent signals (job changes, funding, tech stack)",Yes,Yes,Partial,No,Partial,Yes,Yes,Yes,No,Yes
-CRM enrichment automatic (sync bidirectional),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes
-Web scraping custom,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
-Public API,Yes,Yes,Unknown,Yes,Yes,Yes,Limited,Yes,Yes,Yes
-Chrome extension,No,No,No,No,Yes,No,No,No,No,No
-Bulk operations (CSV upload/export),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-GDPR compliance tools,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-Email verification before sending,No,Yes,Yes,Yes,No,Unknown,Yes,Yes,No,Yes
-A/B testing of outreach,Yes,Unknown,Unknown,No,No,Yes,Unknown,Unknown,No,Unknown
-Analytics/reporting,Yes,Yes,Unknown,Limited,Yes,Yes,Yes,Yes,Yes,Yes
-Team collaboration features,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-Webhooks,Yes,Yes,Yes,Yes,Yes,Yes,Unknown,Yes,Yes,Yes
+Feature,Clay,Persana AI,Freckle,BetterContact,Databar.ai,Cargo,11x.ai,Landbase,Gumloop,Tapistro,Apollo.io,Lusha,Cognism,Seamless.AI,ZoomInfo
+Waterfall enrichment (multi-provider),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Partial,Partial,No,Yes
+AI agents autonomous,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Limited,Yes,Yes,No,Limited,Limited,Yes
+"Intent signals (job changes, funding, tech stack)",Yes,Yes,Partial,No,Partial,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Partial,Yes
+CRM enrichment automatic (sync bidirectional),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
+Web scraping custom,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,Yes
+Public API,Yes,Yes,Unknown,Yes,Yes,Yes,Limited,Yes,Yes,Yes,Yes,Yes,Yes,Limited,Yes
+Chrome extension,No,No,No,No,Yes,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes
+Bulk operations (CSV upload/export),Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+GDPR compliance tools,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Partial,Yes
+Email verification before sending,No,Yes,Yes,Yes,No,Unknown,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
+A/B testing of outreach,Yes,Unknown,Unknown,No,No,Yes,Unknown,Unknown,No,Unknown,Yes,Limited,Unknown,Limited,Yes
+Analytics/reporting,Yes,Yes,Unknown,Limited,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Limited,Yes
+Team collaboration features,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+Webhooks,Yes,Yes,Yes,Yes,Yes,Yes,Unknown,Yes,Yes,Yes,Yes,Yes,Yes,Limited,Yes
