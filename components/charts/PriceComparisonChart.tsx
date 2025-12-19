@@ -87,19 +87,11 @@ export function PriceComparisonChart({ selectedSlugs, pricingData, showMax = tru
                   width: `${Math.max(percent, 2)}%`,
                   background: `linear-gradient(90deg, ${item.color}dd, ${item.color})`,
                 }}
-              >
-                {percent > 30 && (
-                  <span style={{ color: "#fff", fontWeight: 700, paddingRight: 8, textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
-                    {formatPrice(price)}
-                  </span>
-                )}
-              </div>
+              />
             </div>
-            <div className="priceChart__value">
-              {percent <= 30 && formatPrice(price)}
-              {item.minPrice !== item.maxPrice && (
-                <span style={{ color: "var(--muted)", fontSize: 10 }}>/mo</span>
-              )}
+            <div className="priceChart__value" style={{ minWidth: 90, textAlign: "right" }}>
+              <span style={{ fontWeight: 600 }}>{formatPrice(price)}</span>
+              <span style={{ color: "var(--muted)", fontSize: 10 }}>/mo</span>
             </div>
           </div>
         );

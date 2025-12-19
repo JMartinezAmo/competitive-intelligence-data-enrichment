@@ -75,16 +75,10 @@ export function FeatureComparisonChart({ selectedSlugs, featureCounts }: Props) 
                 width: `${Math.max(item.percent, 2)}%`,
                 background: `linear-gradient(90deg, var(--ok)aa, var(--ok))`,
               }}
-            >
-              {item.percent > 40 && (
-                <span style={{ color: "#fff", fontWeight: 700, paddingRight: 8, textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
-                  {item.count}/{item.total}
-                </span>
-              )}
-            </div>
+            />
           </div>
-          <div className="priceChart__value">
-            {item.percent <= 40 && `${item.count}/${item.total}`}
+          <div className="priceChart__value" style={{ minWidth: 80, textAlign: "right" }}>
+            <span style={{ fontWeight: 600 }}>{item.count}/{item.total}</span>
             <span style={{ color: "var(--muted)", fontSize: 10, marginLeft: 4 }}>
               ({Math.round(item.percent)}%)
             </span>
