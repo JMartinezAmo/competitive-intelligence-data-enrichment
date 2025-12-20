@@ -11,6 +11,7 @@ import { PricingTable } from "@/components/PricingTable";
 import { StrengthsWeaknesses } from "@/components/StrengthsWeaknesses";
 import { TierBadge } from "@/components/ui/TierBadge";
 import { VectorTags } from "@/components/ui/VectorTag";
+import { ToolLogo } from "@/components/ui/ToolLogo";
 import { ExternalLinkIcon } from "@/components/Icons";
 
 export async function generateStaticParams() {
@@ -45,12 +46,15 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       {/* Hero Header */}
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-              <h1 className="h1" style={{ fontSize: 24 }}>{tool.name}</h1>
-              <TierBadge tier={tool.tier} />
+          <div style={{ display: "flex", gap: 16 }}>
+            <ToolLogo website={tool.website} name={tool.name} size={56} />
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+                <h1 className="h1" style={{ fontSize: 24 }}>{tool.name}</h1>
+                <TierBadge tier={tool.tier} />
+              </div>
+              <VectorTags vectors={tool.vectors} />
             </div>
-            <VectorTags vectors={tool.vectors} />
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <ComparePicker slug={tool.slug} />

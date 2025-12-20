@@ -8,6 +8,7 @@ import { FeatureIcon } from "@/components/ui/FeatureIcon";
 import { TierBadge } from "@/components/ui/TierBadge";
 import { Tooltip, TIER_EXPLANATIONS, VECTOR_EXPLANATIONS } from "@/components/ui/Tooltip";
 import { CheckIcon, BarChartIcon, InfoIcon } from "@/components/Icons";
+import { ToolLogo } from "@/components/ui/ToolLogo";
 import { PriceComparisonChart } from "@/components/charts/PriceComparisonChart";
 import { FeatureComparisonChart } from "@/components/charts/FeatureComparisonChart";
 
@@ -271,7 +272,7 @@ export function CompareClient({
                           gap: 6,
                         }}
                       >
-                        {on && <CheckIcon size={12} />}
+                        {on ? <CheckIcon size={12} /> : <ToolLogo website={t.website} name={t.name} size={16} />}
                         {t.name}
                       </button>
                     </Tooltip>
@@ -316,8 +317,9 @@ export function CompareClient({
                       return (
                         <th key={toolName} style={{ minWidth: 100 }}>
                           <div className="compareTable__toolHeader">
-                            {tool && <TierBadge tier={tool.tier} size="sm" showIcon={false} />}
+                            {tool && <ToolLogo website={tool.website} name={tool.name} size={24} />}
                             <span className="compareTable__toolName">{toolName}</span>
+                            {tool && <TierBadge tier={tool.tier} size="sm" showIcon={false} />}
                           </div>
                         </th>
                       );

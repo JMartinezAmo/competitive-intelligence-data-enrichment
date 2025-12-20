@@ -6,6 +6,7 @@ import { VectorTags } from "@/components/ui/VectorTag";
 import { FeatureScore } from "@/components/ui/FeatureScore";
 import { PriceRange } from "@/components/ui/PriceDisplay";
 import { ProgressBadge } from "@/components/ProgressBadge";
+import { ToolLogo } from "@/components/ui/ToolLogo";
 import { ExternalLinkIcon, ChevronRightIcon } from "@/components/Icons";
 
 type Props = {
@@ -17,13 +18,16 @@ export function ToolCard({ tool, metrics }: Props) {
   return (
     <div className="toolCard">
       <div className="toolCard__header">
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <h3 className="toolCard__title">{tool.name}</h3>
-            <TierBadge tier={tool.tier} size="sm" />
-          </div>
-          <div className="toolCard__meta">
-            <VectorTags vectors={tool.vectors} />
+        <div style={{ display: "flex", gap: 12 }}>
+          <ToolLogo website={tool.website} name={tool.name} size={40} />
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <h3 className="toolCard__title">{tool.name}</h3>
+              <TierBadge tier={tool.tier} size="sm" />
+            </div>
+            <div className="toolCard__meta">
+              <VectorTags vectors={tool.vectors} />
+            </div>
           </div>
         </div>
         <ProgressBadge slug={tool.slug} />
